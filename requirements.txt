@@ -1,0 +1,10 @@
+pyttsx3
+SpeechRecognition
+pyaudio
+tkinter
+pyinstaller
+pillow
+edge-tts
+selenium webdriver-manager
+pygetwindow
+pyppeteer2
