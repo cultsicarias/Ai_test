@@ -4,7 +4,7 @@ import datetime
 import re
 from speech_engine import speak
 from web_control import open_youtube_and_search  # Using Selenium+JS version
-from web_content import get_fun_fact, get_joke, get_quote, get_news_headlines, get_weather, get_horoscope , get_random_fact,get_word_of_the_day,get_quote_of_the_day, get_idiom,get_joke, get_riddle, get_cat_fact, get_did_you_know, get_today_in_history,get_top_news,get_trending_searches,get_programming_quote,get_github_trending
+from web_content import get_fun_fact, get_joke, get_quote, get_news_headlines, get_random_fact,get_word_of_the_day,get_quote_of_the_day, get_idiom,get_joke, get_riddle, get_cat_fact, get_did_you_know, get_today_in_history,get_top_news,get_trending_searches,get_programming_quote,get_github_trending
 
 
 # 🧠 Extract YouTube search query from conversational commands

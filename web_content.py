@@ -94,6 +94,13 @@ def get_today_in_history():
     events = soup.select(".event")
     return random.choice(events).text.strip() if events else "Couldn't fetch history event."
 
+def get_news_headlines():
+    res = requests.get("https://www.bbc.com/news", headers=headers)
+    soup = BeautifulSoup(res.text, "html.parser")
+    headlines = soup.select(".gs-c-promo-heading__title")
+    top = [h.text.strip() for h in headlines[:3]]
+    return "\n".join(top) if top else "Couldn't fetch news."
+
 def get_top_news():
     res = requests.get("https://www.bbc.com/news", headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
