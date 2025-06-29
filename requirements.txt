@@ -8,3 +8,4 @@ edge-tts
 selenium webdriver-manager
 pygetwindow
 pyppeteer2
+beautifulsoup4

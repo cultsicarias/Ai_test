@@ -1,13 +1,13 @@
-
-from ui_utils import set_log_widget, update_log
+import os
+import threading
 import tkinter as tk
+from PIL import Image, ImageTk, ImageSequence
+
 from speech_engine import speak, listen
 from commands import process_command
-from PIL import Image, ImageTk, ImageSequence
-import threading
-import os
+from ui_utils import set_log_widget
 
-# Function to play animated GIF
+# --- ANIMATED GIF CLASS ---
 class AnimatedGIF(tk.Label):
     def __init__(self, master, path, delay=100):
         im = Image.open(path)
@@ -16,7 +16,7 @@ class AnimatedGIF(tk.Label):
             while True:
                 frame = im.copy().resize((128, 128), Image.Resampling.LANCZOS)
                 seq.append(frame)
-                im.seek(len(seq))  # next frame
+                im.seek(len(seq))
         except EOFError:
             pass
 
@@ -36,40 +36,43 @@ class AnimatedGIF(tk.Label):
     def stop(self):
         self.cancel = True
 
-# Update log safely
+# --- LOG HANDLER ---
 def update_log(text):
     log.config(state=tk.NORMAL)
     log.insert(tk.END, text)
     log.see(tk.END)
     log.config(state=tk.DISABLED)
 
-# AI Logic Thread
+# --- VOICE COMMAND THREAD ---
 def run_ai():
     command = listen()
     if command:
         result = process_command(command)
         if result != "__async__":
-            log.insert(tk.END, f"👤 You: {command}\n🤖 AI: {result}\n\n")
-            log.see(tk.END)
+            update_log(f"👤 You (Voice): {command}\n🤖 AI: {result}\n\n")
 
+# --- TEXT COMMAND HANDLER ---
+def run_text_command():
+    command = input_entry.get().strip()
+    if command:
+        input_entry.delete(0, tk.END)
+        update_log(f"👤 You (Typed): {command}\n")
+        threading.Thread(target=process_and_log, args=(command,), daemon=True).start()
 
-def start_thread():
-    t = threading.Thread(target=run_ai)
-    t.daemon = True
-    t.start()
+def process_and_log(command):
+    result = process_command(command)
+    if result != "__async__":
+        update_log(f"🤖 AI: {result}\n\n")
 
-# --- GUI SETUP ---
-
+# --- MAIN GUI ---
 window = tk.Tk()
 window.title("✨ AI Assistant")
-window.geometry("600x600")
+window.geometry("600x650")
 window.configure(bg="#1e1e2e")
 
-# Title
 title = tk.Label(window, text="🤖 Your AI Assistant", font=("Helvetica", 20, "bold"), fg="#f5c542", bg="#1e1e2e")
 title.pack(pady=10)
 
-# Avatar
 if os.path.exists("avatar.gif"):
     try:
         avatar = AnimatedGIF(window, "avatar.gif", delay=100)
@@ -79,23 +82,30 @@ if os.path.exists("avatar.gif"):
 else:
     print("⚠️ avatar.gif not found!")
 
-# Log Output Box
 log = tk.Text(window, height=15, width=65, font=("Courier New", 10), bg="#2d2d44", fg="#ffffff", wrap="word")
-set_log_widget(log)
 log.pack(pady=10)
 log.config(state=tk.DISABLED)
+set_log_widget(log)
 
-# Buttons
+# --- Text Command Input ---
+input_entry = tk.Entry(window, font=("Courier New", 12), width=55, bg="#3b3b58", fg="#ffffff")
+input_entry.pack(pady=10)
+input_entry.bind("<Return>", lambda event: run_text_command())  # Press Enter to send
+
+# --- Buttons ---
 btn_frame = tk.Frame(window, bg="#1e1e2e")
 btn_frame.pack()
 
-listen_btn = tk.Button(btn_frame, text="🎤 Start Listening", font=("Arial", 12), bg="#45c4b0", fg="white", command=start_thread)
+listen_btn = tk.Button(btn_frame, text="🎤 Start Listening", font=("Arial", 12), bg="#45c4b0", fg="white", command=lambda: threading.Thread(target=run_ai, daemon=True).start())
 listen_btn.pack(side="left", padx=10)
+
+send_btn = tk.Button(btn_frame, text="📨 Send", font=("Arial", 12), bg="#557ef8", fg="white", command=run_text_command)
+send_btn.pack(side="left", padx=10)
 
 exit_btn = tk.Button(btn_frame, text="❌ Exit", font=("Arial", 12), bg="#f55c47", fg="white", command=window.destroy)
 exit_btn.pack(side="right", padx=10)
 
-# Start voice greeting
+# --- Greeting ---
 try:
     speak("Hello! I'm ready to help.")
 except Exception as e:

@@ -4,6 +4,8 @@ import datetime
 import re
 from speech_engine import speak
 from web_control import open_youtube_and_search  # Using Selenium+JS version
+from web_content import get_fun_fact, get_joke, get_quote, get_news_headlines, get_weather, get_horoscope , get_random_fact,get_word_of_the_day,get_quote_of_the_day, get_idiom,get_joke, get_riddle, get_cat_fact, get_did_you_know, get_today_in_history,get_top_news,get_trending_searches,get_programming_quote,get_github_trending
+
 
 # 🧠 Extract YouTube search query from conversational commands
 def extract_youtube_query(command):
@@ -47,11 +49,26 @@ def process_command(command):
         return response
 
     # 🌐 Web Search
-    elif "search for" in command:
+    elif "search for" in command or "google" in command:
         query = command.replace("search for", "").strip()
         url = f"https://www.google.com/search?q={query}"
         webbrowser.open(url)
         response = f"Searching for {query}"
+        speak(response)
+        return response
+    
+    elif "news" in command or "what's happening" in command:
+        response = get_news_headlines()
+        speak(response)
+        return response
+
+    elif "weather" in command:
+        response = get_weather("Bangalore")  # Or replace with your city
+        speak(response)
+        return response
+
+    elif "horoscope" in command or "zodiac" in command:
+        response = get_horoscope("aries")  # Or use logic to dynamically choose
         speak(response)
         return response
 
@@ -60,6 +77,98 @@ def process_command(command):
         response = "I am your custom AI assistant."
         speak(response)
         return response
+    
+    elif "greet me" in command:
+        response = "Hello, how are you?"
+        speak(response)
+        return response
+    
+    elif "asshole" in command:
+        response = "You are an asshole."
+        speak(response)
+        return response
+    
+    elif "fuck you" in command:
+        response = "I'm sorry, but FUCK U"
+        speak(response)
+        return response
+    
+    elif "fuck off" in command:
+        response = "I'm sorry, but FUCK OFF"
+        speak(response)
+        return response
+    
+    elif "fun fact" in command or "tell me something interesting" in command:
+        response = get_fun_fact()
+        speak(response)
+        return response
+
+    elif "tell me a joke" in command or "make me laugh" in command:
+        response = get_joke()
+        speak(response)
+        return response
+
+    elif "motivate me" in command or "inspire me" in command or "quote" in command:
+        response = get_quote()
+        speak(response)
+        return response
+    
+    elif "word of the day" in command:
+        response = get_word_of_the_day()
+        speak(response)
+        return response
+
+    elif "idiom" in command:
+        response = get_idiom()
+        speak(response)
+        return response
+
+    elif "joke" in command:
+        response = get_joke()
+        speak(response)
+        return response
+
+    elif "riddle" in command:
+        response = get_riddle()
+        speak(response)
+        return response
+
+    elif "cat fact" in command:
+        response = get_cat_fact()
+        speak(response)
+        return response
+
+    elif "did you know" in command:
+        response = get_did_you_know()
+        speak(response)
+        return response
+
+    elif "today in history" in command:
+        response = get_today_in_history()
+        speak(response)
+        return response
+
+    elif "top news" in command or "news" in command:
+        response = get_top_news()
+        speak(response)
+        return response
+
+    elif "trending search" in command:
+        response = get_trending_searches()
+        speak(response)
+        return response
+
+    elif "programming quote" in command:
+        response = get_programming_quote()
+        speak(response)
+        return response
+
+    elif "trending on github" in command or "search github" in command:
+        response = get_github_trending()
+        speak(response)
+        return response
+
+
 
     # 🌞 Greetings
     elif "good morning" in command or "good night" in command:
@@ -91,6 +200,8 @@ def process_command(command):
         speak("Shutting down. Goodbye!")
         os.system("shutdown /s /t 5")
         return "Shutting down."
+    
+
 
     # 🆘 Help
     elif "help" in command:
