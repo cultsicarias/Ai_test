@@ -7,7 +7,7 @@ from speech_engine import speak, listen
 from commands import process_command
 from ui_utils import set_log_widget
 
-# --- ANIMATED GIF CLASS ---
+
 class AnimatedGIF(tk.Label):
     def __init__(self, master, path, delay=100):
         im = Image.open(path)
@@ -36,7 +36,6 @@ class AnimatedGIF(tk.Label):
     def stop(self):
         self.cancel = True
 
-# --- LOG HANDLER ---
 def update_log(text):
     log.config(state=tk.NORMAL)
     log.insert(tk.END, text)
@@ -51,7 +50,7 @@ def run_ai():
         if result != "__async__":
             update_log(f"👤 You (Voice): {command}\n🤖 AI: {result}\n\n")
 
-# --- TEXT COMMAND HANDLER ---
+
 def run_text_command():
     command = input_entry.get().strip()
     if command:
@@ -64,7 +63,7 @@ def process_and_log(command):
     if result != "__async__":
         update_log(f"🤖 AI: {result}\n\n")
 
-# --- MAIN GUI ---
+
 window = tk.Tk()
 window.title("✨ AI Assistant")
 window.geometry("600x650")
@@ -87,12 +86,12 @@ log.pack(pady=10)
 log.config(state=tk.DISABLED)
 set_log_widget(log)
 
-# --- Text Command Input ---
+
 input_entry = tk.Entry(window, font=("Courier New", 12), width=55, bg="#3b3b58", fg="#ffffff")
 input_entry.pack(pady=10)
 input_entry.bind("<Return>", lambda event: run_text_command())  # Press Enter to send
 
-# --- Buttons ---
+
 btn_frame = tk.Frame(window, bg="#1e1e2e")
 btn_frame.pack()
 
@@ -105,7 +104,7 @@ send_btn.pack(side="left", padx=10)
 exit_btn = tk.Button(btn_frame, text="❌ Exit", font=("Arial", 12), bg="#f55c47", fg="white", command=window.destroy)
 exit_btn.pack(side="right", padx=10)
 
-# --- Greeting ---
+
 try:
     speak("Hello! I'm ready to help.")
 except Exception as e:

@@ -4,7 +4,6 @@ import random
 
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-# 🧠 Fun Fact
 def get_fun_fact():
     try:
         res = requests.get("https://www.thefactsite.com/1000-interesting-facts/")
@@ -14,7 +13,7 @@ def get_fun_fact():
     except:
         return "Couldn't fetch a fun fact right now!"
 
-# 😂 Joke
+
 def get_joke():
     try:
         res = requests.get("https://upjoke.com/")
@@ -24,7 +23,6 @@ def get_joke():
     except:
         return "Oops! I can't find a joke right now."
 
-# 💪 Motivation
 def get_quote():
     try:
         res = requests.get("https://www.keepinspiring.me/positive-inspirational-life-quotes/")
@@ -34,7 +32,6 @@ def get_quote():
     except:
         return "You're doing great! Keep going!"
 
-# ------------------ Language & Quotes ------------------
 def get_random_fact():
     res = requests.get("https://www.thefactsite.com/1000-interesting-facts/", headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
@@ -62,7 +59,7 @@ def get_idiom():
     idioms = soup.select("#page li a")
     return random.choice(idioms).text.strip() if idioms else "No idiom found."
 
-# ------------------ Fun & Entertainment ------------------
+
 def get_joke():
     res = requests.get("https://upjoke.com/", headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
@@ -87,7 +84,7 @@ def get_did_you_know():
     posts = soup.select(".post-title")
     return random.choice(posts).text.strip() if posts else "Couldn't fetch trivia."
 
-# ------------------ World & News ------------------
+
 def get_today_in_history():
     res = requests.get("https://www.onthisday.com/", headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
@@ -114,7 +111,6 @@ def get_trending_searches():
     searches = soup.select(".details-top span")
     return ", ".join(s.text.strip() for s in searches[:5]) if searches else "Couldn't fetch trending searches."
 
-# ------------------ Tech & Programming ------------------
 def get_programming_quote():
     res = requests.get("https://quotes.stormconsultancy.co.uk/random.json")
     if res.status_code == 200:
@@ -131,7 +127,6 @@ def get_github_trending():
         return f"Trending Repo: {repo.text.strip()} — https://github.com{repo['href']}"
     return "Couldn't fetch trending repo."
 
-# ------------------ Example ------------------
 if __name__ == "__main__":
     print(get_random_fact())
     print(get_word_of_the_day())

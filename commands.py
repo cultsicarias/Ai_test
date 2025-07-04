@@ -3,11 +3,11 @@ import webbrowser
 import datetime
 import re
 from speech_engine import speak
-from web_control import open_youtube_and_search  # Using Selenium+JS version
+from web_control import open_youtube_and_search 
 from web_content import get_fun_fact, get_joke, get_quote, get_news_headlines, get_random_fact,get_word_of_the_day,get_quote_of_the_day, get_idiom,get_joke, get_riddle, get_cat_fact, get_did_you_know, get_today_in_history,get_top_news,get_trending_searches,get_programming_quote,get_github_trending
 
 
-# 🧠 Extract YouTube search query from conversational commands
+
 def extract_youtube_query(command):
     command = command.lower()
     filler_phrases = [
@@ -23,7 +23,7 @@ def extract_youtube_query(command):
 def process_command(command):
     command = command.lower()
 
-    # 🎯 Smart YouTube Intent Detection
+    
     if any(word in command for word in ["youtube", "watch", "play", "look up", "find"]):
         query = extract_youtube_query(command)
         if not query:
@@ -34,21 +34,21 @@ def process_command(command):
         speak(response)
         return response
 
-    # 🕐 Time
+    
     elif "time" in command:
         now = datetime.datetime.now().strftime("%H:%M:%S")
         response = f"The current time is {now}"
         speak(response)
         return response
 
-    # 📓 Notepad
+    
     elif "open notepad" in command:
         os.system("start notepad")
         response = "Opening Notepad."
         speak(response)
         return response
 
-    # 🌐 Web Search
+   
     elif "search for" in command or "google" in command:
         query = command.replace("search for", "").strip()
         url = f"https://www.google.com/search?q={query}"
@@ -63,16 +63,16 @@ def process_command(command):
         return response
 
     elif "weather" in command:
-        response = get_weather("Bangalore")  # Or replace with your city
+        response = get_weather("Bangalore")  
         speak(response)
         return response
 
     elif "horoscope" in command or "zodiac" in command:
-        response = get_horoscope("aries")  # Or use logic to dynamically choose
+        response = get_horoscope("aries")  
         speak(response)
         return response
 
-    # 🧠 Identity
+    
     elif "your name" in command:
         response = "I am your custom AI assistant."
         speak(response)
@@ -168,9 +168,12 @@ def process_command(command):
         speak(response)
         return response
 
+    elif "freaky" in command:
+        speak("freaky gahdhe , you are a donkey , gahdhey saalee")
+        return "freaky GADHE"
 
 
-    # 🌞 Greetings
+    
     elif "good morning" in command or "good night" in command:
         hour = datetime.datetime.now().hour
         if 5 <= hour < 12:
@@ -184,7 +187,7 @@ def process_command(command):
         speak(response)
         return response
 
-    # 🌐 Websites
+   
     elif "open github" in command:
         webbrowser.open("https://github.com")
         speak("Opening GitHub.")
@@ -195,15 +198,16 @@ def process_command(command):
         speak("Opening Reddit.")
         return "Opening Reddit."
 
-    # 🔻 Shutdown
     elif "shut down the computer" in command:
         speak("Shutting down. Goodbye!")
         os.system("shutdown /s /t 5")
         return "Shutting down."
     
+    elif "speak" or "recite this" in command:
+        speak(command)
+        return command
 
-
-    # 🆘 Help
+    
     elif "help" in command:
         response = (
             "Here’s what I can do:\n"
@@ -217,7 +221,7 @@ def process_command(command):
         speak(response)
         return response
 
-    # ❓ Fallback
+    
     else:
         response = "Sorry, I don't know how to do that yet."
         speak(response)

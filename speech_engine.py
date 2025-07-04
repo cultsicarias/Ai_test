@@ -11,7 +11,7 @@ async def async_speak(text, output_file="voice.mp3"):
         communicate = edge_tts.Communicate(text, voice="en-US-JennyNeural")
         await communicate.save(output_file)
         playsound(output_file)
-        os.remove(output_file)  # Clean up temp file
+        os.remove(output_file) 
     except Exception as e:
         print("Voice error:", e)
 
